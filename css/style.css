@@ -167,7 +167,11 @@ body {
     row-gap: 10px;
 }
 
-
+.listCard li div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 .listCard li img {
     width: 90%;
