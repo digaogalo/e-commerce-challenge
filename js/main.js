@@ -17,44 +17,44 @@ closeShopping.addEventListener("click", () => {
 let products = [
    {
     id: 1,
-    name: "PRODUCT 1",
+    name: "NIKE",
     images: "1.PNG",
-    price: 2000
+    price: 249.99
    } ,
 
    {
     id: 2,
-    name: "PRODUCT 2",
+    name: "MIZUNO",
     images: "2.PNG",
-    price: 2200
+    price: 308.99
    } ,
 
    {
     id:3,
-    name: "PRODUCT 3",
+    name: "ASICS",
     images: "3.PNG",
-    price: 2400
+    price: 359.99
    } ,
 
    {
     id: 4,
-    name: "PRODUCT 4",
+    name: "NIKE RENEW",
     images: "4.PNG",
-    price: 2600
+    price: 369.99
    } ,
 
    {
     id: 5,
-    name: "PRODUCT 5",
+    name: "ADIDAS OLD SCHOOL",
     images: "5.PNG",
-    price: 1800
+    price: 279.99
    } ,
 
    {
     id: 6,
-    name: "PRODUCT 6",
+    name: "ADIDAS RUNNER",
     images: "6.PNG",
-    price: 1600
+    price: 259.99
    } ,
 ]
 
@@ -67,8 +67,8 @@ const initApp = () => {
         newDiv.innerHTML = `
             <img src ="img/${value.images}">
             <div class ="title">${value.name}</div>
-            <div class ="price">${value.price.toLocaleString()}</div>
-            <button onclick="addToCard(${key})">Add To Card</button>
+            <div class ="price">R$${value.price.toLocaleString()}</div>
+            <button onclick="addToCard(${key})">ADICIONAR AO CARRINHO</button>
         `
 
         list.appendChild(newDiv)
@@ -86,52 +86,92 @@ const addToCard = (key) => {
     reloadCard();
 }
 
+const discountPercent = 5;
+const ipiPercent = 10;
+
+const calculateSubtotal = (product) => {
+    const subtotal = product.price * product.quantity;
+    const discount = (subtotal * discountPercent) / 100;
+    const ipi = (subtotal * ipiPercent) / 100;
+    return subtotal - discount + ipi;
+};
+
+const calculateTotal = () => {
+    let totalProducts = 0;
+    let totalTaxes = 0;
+
+    for (const key in listCards) {
+        if (listCards.hasOwnProperty(key)) {
+            const product = listCards[key];
+            const subtotal = calculateSubtotal(product);
+            totalProducts += subtotal;
+            totalTaxes += (subtotal - (product.price * product.quantity));
+        }
+    }
+
+    return {
+        totalProducts,
+        totalTaxes,
+        totalOrder: totalProducts + totalTaxes,
+    };
+};
+
 const reloadCard = () => {
     listCard.innerHTML = "";
-    let count = 0;
     let totalPrice = 0;
+    let totalQuantity = 0;
 
-    listCards.forEach((value, key) =>{
-        totalPrice = totalPrice + value.price;
-        count = count + value.quantity;
+    for (const key in listCards) {
+        if (listCards.hasOwnProperty(key)) {
+            const value = listCards[key];
+            const subtotal = calculateSubtotal(value);
 
-        if(value != null) {
             let newDiv = document.createElement("li");
             newDiv.innerHTML = `
-                <div><img src ="img/${value.images}"></div>
-                <div class ="cardTitle">${value.name}</div>
-                <div class ="cardPrice">${value.price.toLocaleString()}</div>
+                <div><img src="img/${value.images}"></div>
+                <div class="cardTitle">${value.name}</div>
+                <div class="cardPrice">R$${subtotal.toLocaleString()}</div>
 
                 <div>
-                    <button style="background-color: #560bad"
-                    class="cardButton" onclick = "changeQuantity(
-                    ${key},${value.quantity - 1}")>-</button>  
-                      
-                    <div class ="count">${count}</div>
+                    <button style="background-color: #560bad"   
+                    class="cardButton" onclick="changeQuantity(${key},  
+                    ${value.quantity - 1})">-</button>  
 
-                    <button style="background-color: #560bad"
-                    class="cardButton" onclick = "changeQuantity(
-                    ${key}, ${value.quantity + 1}")>+</button>
-                     
+                    <div class="count">${value.quantity}</div>
+
+                    <button style="background-color: #560bad"   
+                    class="cardButton" onclick="changeQuantity(${key},  
+                    ${value.quantity + 1})">+</button>
                 </div>
-            `
+            `;
 
             listCard.appendChild(newDiv);
-        }
 
-        total.innerText = totalPrice.toLocaleString();
-        quantity.innerText = count;
-    })
-}
+            totalPrice += subtotal;
+            totalQuantity += value.quantity;
+        }
+    }
+
+    const { totalProducts, totalTaxes, totalOrder } = calculateTotal();
+
+    total.innerText = totalProducts.toLocaleString();
+    quantity.innerText = totalQuantity;
+    taxes.innerText = totalTaxes.toLocaleString();
+    orderTotal.innerText = totalOrder.toLocaleString();
+};
 
 const changeQuantity = (key, quantity) => {
-    if(quantity == 0) {
-        delete listCards[key]
-    }
-    else {
+    if (quantity == 0) {
+        const confirmation = confirm("Tem certeza de que deseja excluir este produto?");
+        
+        if (confirmation) {
+            delete listCards[key];
+        }
+    } else {
         listCards[key].quantity = quantity;
-        listCards[key].price = quantity * products[key].price;
     }
 
-    reloadCard()
+    reloadCard();
 }
+
+

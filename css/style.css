@@ -117,7 +117,6 @@ body {
     letter-spacing: 1px;
     transition: all 0.25s ease;
     border-radius: 8px;
-    cursor: pointer;
 }
 
 .list .item:hover {
@@ -138,13 +137,13 @@ body {
 }
 
 .list .item:hover .title,
-.list .item:hover .title {
+.list .item:hover .price {
     color: #efefef;
 }
 
 .list .item button {
-    background-color:#efefef;
-    color: #1d1c76;
+    background-color: #1d1c76;
+    color: #efefef;
     font-size: 1rem;
     font-weight: 600;
     width: 100%;
@@ -152,11 +151,12 @@ body {
     border: 3px solid #1d1c76;
     border-radius: 8px;
     transition: all 0.25s ease;
+    cursor: pointer;
 }
 
 .list .item button:hover {
-    background-color: #42408a;
-    color: #efefef;
+    background-color:  #efefef;
+    color: #42408a;
 }
 
 
