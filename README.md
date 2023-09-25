@@ -1,4 +1,4 @@
-# README - Projeto Carrinho de compras
+# Projeto Carrinho de compras
 ![Captura de Tela (34)](https://github.com/digaogalo/e-commerce-challenge/assets/101463566/4da7c04b-d912-4bc1-9eb3-42d20b5ab243)
 
 Aqui você encontrará todas as informações necessárias para baixar e executar este projeto em sua máquina local.
