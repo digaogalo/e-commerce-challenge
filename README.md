@@ -83,7 +83,7 @@ Se você deseja contribuir para este projeto, siga estas etapas:
 
 ## Contato
 
-Se você tiver alguma dúvida ou precisar entrar em contato, você pode me encontrar no meu LinkedIn :
+Se você tiver alguma dúvida ou precisar entrar em contato, você pode me encontrar no LinkedIn :
 
 https://www.linkedin.com/in/rodrigolc/
 
