@@ -7,7 +7,7 @@ Aqui você encontrará todas as informações necessárias para baixar e executa
 
 ### Este projeto é uma pequena simulação de um carrinho de compras. segue o link do deploy para a navegação: 
 
-# https://65104366d1e26860b4dbf7ea--candid-biscotti-a3acfe.netlify.app/
+ https://65104366d1e26860b4dbf7ea--candid-biscotti-a3acfe.netlify.app/
 
 Introdução:
 Desenvolver uma pequena aplicação que adiciona itens a um carrinho de compras a partir de uma lista de produtos.
