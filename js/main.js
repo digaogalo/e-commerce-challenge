@@ -91,10 +91,16 @@ const ipiPercent = 10;
 
 const calculateSubtotal = (product) => {
     const subtotal = product.price * product.quantity;
-    const discount = (subtotal * discountPercent) / 100;
-    const ipi = (subtotal * ipiPercent) / 100;
+    const discount = (subtotal * (discountPercent / 100)); // Calcula o desconto corretamente
+    const ipi = (subtotal * (ipiPercent / 100));
+
+    console.log('Subtotal:', subtotal);
+    console.log('Desconto:', discount);
+    console.log('IPI:', ipi);
+
     return subtotal - discount + ipi;
 };
+
 
 const calculateTotal = () => {
     let totalProducts = 0;
@@ -120,17 +126,20 @@ const reloadCard = () => {
     listCard.innerHTML = "";
     let totalPrice = 0;
     let totalQuantity = 0;
+    let totalTaxes = 0;
 
     for (const key in listCards) {
         if (listCards.hasOwnProperty(key)) {
             const value = listCards[key];
             const subtotal = calculateSubtotal(value);
+            const taxes = (subtotal - (value.price * value.quantity));
+            const discount = (subtotal - taxes - (value.price * value.quantity));
 
             let newDiv = document.createElement("li");
             newDiv.innerHTML = `
                 <div><img src="img/${value.images}"></div>
                 <div class="cardTitle">${value.name}</div>
-                <div class="cardPrice">R$${subtotal.toLocaleString()}</div>
+                <div class="taxesInfo">IPI: R$${taxes.toFixed(2)}</div>
 
                 <div>
                     <button style="background-color: #560bad"   
@@ -148,11 +157,12 @@ const reloadCard = () => {
             listCard.appendChild(newDiv);
 
             totalPrice += subtotal;
+            totalTaxes += taxes;
             totalQuantity += value.quantity;
         }
     }
 
-    const { totalProducts, totalTaxes, totalOrder } = calculateTotal();
+    const { totalProducts, totalOrder } = calculateTotal();
 
     total.innerText = totalProducts.toLocaleString();
     quantity.innerText = totalQuantity;
@@ -160,18 +170,29 @@ const reloadCard = () => {
     orderTotal.innerText = totalOrder.toLocaleString();
 };
 
+
 const changeQuantity = (key, quantity) => {
     if (quantity == 0) {
-        const confirmation = confirm("Tem certeza de que deseja excluir este produto?");
-        
-        if (confirmation) {
-            delete listCards[key];
-        }
+        Swal.fire({
+            title: 'Excluir Produto',
+            text: 'Tem certeza que deseja excluir este produto?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#1d1c76',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Excluir',
+            cancelButtonText: 'Cancelar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                delete listCards[key];
+                reloadCard();
+            }
+        });
     } else {
         listCards[key].quantity = quantity;
+        reloadCard();
     }
-
-    reloadCard();
 }
+
 
 
